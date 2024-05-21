@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carregar Áudios</title>
+</head>
+<body>
+<h1>Carregar Áudios</h1>
+<ul id="audioList"></ul>
+
+<script>
+async function fetchAudioFiles(directoryPath) {
+    try {
+        const response = await fetch(directoryPath);
+        if (!response.ok) {
+            throw new Error('Falha ao carregar lista de áudios');
+        }
+        
+        return await response.json(); // Supondo que o servidor retorna uma lista de nomes de arquivos em formato JSON
+    } catch (error) {
+        throw new Error('Erro ao carregar os áudios:', error);
+    }
+}
+
+function displayAudioList(files) {
+    const audioList = document.getElementById('audioList');
+    files.forEach(file => {
+        const listItem = document.createElement('li');
+        listItem.textContent = file;
+        audioList.appendChild(listItem);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const directoryPath = 'DirtSamples'; // Substitua pela URL do diretório onde seus áudios estão hospedados
+
+    try {
+        const files = await fetchAudioFiles(directoryPath);
+        displayAudioList(files);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
+</script>
+</body>
+</html>
